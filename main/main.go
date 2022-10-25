@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
-	"github.com/MKuchum/tada-testing/internal/Tribonacci"
-	"github.com/MKuchum/tada-testing/models"
+	"github.com/MKuchum/tada-testing/internal/web"
+	"net/http"
 )
 
 func main() {
-	fmt.Println(Tribonacci.Tribonacci(models.NewTribonacciInput([]float32{0, 0, 1}, 10)))
+	s := web.NewServer()
+	if err := http.ListenAndServe("localhost:8080", s); err != nil {
+		panic(err)
+	}
 }
