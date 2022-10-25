@@ -1,14 +1,11 @@
 package models
 
-import "fmt"
-
 type TribonacciInput struct {
 	Signature []float32 `json:"signature"`
 	N         int64     `json:"n"`
 }
 
 func (input *TribonacciInput) Validate() error {
-	fmt.Println(input)
 	if len(input.Signature) != 3 {
 		return WrongSignatureLenErr
 	}
