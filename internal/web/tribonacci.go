@@ -20,6 +20,7 @@ func (*Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, fmt.Sprintf("unknown method %s", req.Method), http.StatusNotFound)
 		return
 	}
+
 	reqBytes, err := io.ReadAll(req.Body)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -30,6 +31,10 @@ func (*Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
+	if input.Signature == nil { //default signature
+		input.Signature = []float32{1, 1, 1}
+	}
+
 	output, err := tribonacci.Tribonacci(input)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -40,6 +45,7 @@ func (*Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+
 	w.Header().Set("Content-Type", "application/json")
 	if _, err := w.Write(respBytes); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
