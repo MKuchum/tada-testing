@@ -10,8 +10,12 @@ type Tribonacci struct {
 	s storage.TribonacciStorage
 }
 
-func NewTribonacciRedis(addr string, password string, db int) *Tribonacci {
-	return &Tribonacci{s: tribonacciRedis.NewTribonacciStorageRedis(addr, password, db)}
+func NewTribonacciRedis(addr string, password string, db int) (*Tribonacci, error) {
+	s, err := tribonacciRedis.NewTribonacciStorageRedis(addr, password, db)
+	if err != nil {
+		return nil, err
+	}
+	return &Tribonacci{s: s}, nil
 }
 
 func NewTribonacciInMemory() *Tribonacci {

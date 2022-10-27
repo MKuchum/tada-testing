@@ -11,14 +11,16 @@ type Storage struct {
 	r *redis.Client
 }
 
-func NewTribonacciStorageRedis(addr string, password string, db int) storage.TribonacciStorage {
-	return &Storage{
-		r: redis.NewClient(&redis.Options{
-			Addr:     addr,
-			Password: password,
-			DB:       db,
-		}),
+func NewTribonacciStorageRedis(addr string, password string, db int) (storage.TribonacciStorage, error) {
+	r := redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: password,
+		DB:       db,
+	})
+	if err := r.Ping(context.Background()).Err(); err != nil {
+		return nil, err
 	}
+	return &Storage{r: r}, nil
 }
 
 func (s *Storage) genKey(signature []float32) (string, error) {

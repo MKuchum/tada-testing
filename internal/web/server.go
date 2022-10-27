@@ -10,11 +10,15 @@ type Server struct {
 	t *tribonacci.Tribonacci
 }
 
-func NewServer(redisAddr string, redisPassword string, redisDB int) *Server {
+func NewServer(redisAddr string, redisPassword string, redisDB int) (*Server, error) {
+	t, err := tribonacci.NewTribonacciRedis(redisAddr, redisPassword, redisDB)
+	if err != nil {
+		return nil, err
+	}
 	s := &Server{
 		ServeMux: http.NewServeMux(),
-		t:        tribonacci.NewTribonacciRedis(redisAddr, redisPassword, redisDB),
+		t:        t,
 	}
 	s.HandleFunc(getTribonacciPath, s.GetTribonacciHandler)
-	return s
+	return s, nil
 }
