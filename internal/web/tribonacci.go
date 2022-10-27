@@ -3,7 +3,6 @@ package web
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/MKuchum/tada-testing/internal/tribonacci"
 	"github.com/MKuchum/tada-testing/models"
 	"io"
 	"net/http"
@@ -11,7 +10,7 @@ import (
 
 const getTribonacciPath = "/tri"
 
-func (*Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) {
+func (s *Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) {
 	if req.URL.Path != getTribonacciPath {
 		http.Error(w, fmt.Sprintf("unknown path %s", req.URL.Path), http.StatusNotFound)
 		return
@@ -35,7 +34,7 @@ func (*Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) {
 		input.Signature = []float32{1, 1, 1}
 	}
 
-	output, err := tribonacci.Tribonacci(input)
+	output, err := s.t.Generate(input)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
