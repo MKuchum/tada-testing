@@ -14,7 +14,7 @@ func (t *Tribonacci) Generate(input *models.TribonacciInput) (*models.Tribonacci
 		return nil, err
 	}
 	log.Println(values)
-	for int64(len(values)) < input.N {
+	for len(values) < input.N {
 		newValue := values[len(values)-1] + values[len(values)-2] + values[len(values)-3]
 		values = append(values, newValue)
 	}

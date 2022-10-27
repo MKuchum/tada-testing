@@ -2,7 +2,7 @@ package models
 
 type TribonacciInput struct {
 	Signature []float32 `json:"signature"`
-	N         int64     `json:"n"`
+	N         int       `json:"n"`
 }
 
 func (input *TribonacciInput) Validate() error {
