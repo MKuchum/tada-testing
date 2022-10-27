@@ -1,10 +1,11 @@
 package main
 
 import (
-	"flag"
 	"fmt"
 	"github.com/MKuchum/tada-testing/internal/web"
 	"net/http"
+	"os"
+	"strconv"
 )
 
 func main() {
@@ -12,11 +13,28 @@ func main() {
 	var redisPassword string
 	var redisDB int
 	var serverAddr string
-	flag.StringVar(&redisAddr, "redis_addr", "localhost:6379", "Redis address in format 'host:port', by default 'localhost:6739'")
-	flag.StringVar(&redisPassword, "redis_password", "", "Redis password, by default empty")
-	flag.IntVar(&redisDB, "redis_db", 0, "Redis database, by default 0 (redis default DB)")
-	flag.StringVar(&serverAddr, "addr", "localhost:8080", "Server address in format 'host:port', by default 'localhost:8080'")
-	flag.Parse()
+	if redisAddr = os.Getenv("REDIS_ADDR"); redisAddr == "" {
+		fmt.Println("$REDIS_ADDR is null, use default value 'localhost:6379'")
+		redisAddr = "localhost:6379"
+	}
+	if redisPassword = os.Getenv("REDIS_PASSWORD"); redisPassword == "" {
+		fmt.Println("$REDIS_PASSWORD is null, use default empty value")
+		redisPassword = ""
+	}
+	if redisDBStr := os.Getenv("REDIS_DB"); redisDBStr == "" {
+		fmt.Println("$REDIS_DB is null, use default zero value")
+		redisDB = 0
+	} else {
+		var err error
+		redisDB, err = strconv.Atoi(redisDBStr)
+		if err != nil {
+			panic(fmt.Sprintf("$REDIS_DB is not int"))
+		}
+	}
+	if serverAddr = os.Getenv("SERVER_ADDR"); serverAddr == "" {
+		fmt.Println("$SERVER_ADDR is null, use default value 'localhost:8080'")
+		serverAddr = "localhost:8080"
+	}
 
 	s, err := web.NewServer(redisAddr, redisPassword, redisDB)
 	if err != nil {
