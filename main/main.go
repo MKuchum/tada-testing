@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	s := web.NewServer()
+	s := web.NewServer("localhost:6379", "", 0)
 	if err := http.ListenAndServe("localhost:8080", s); err != nil {
 		panic(err)
 	}

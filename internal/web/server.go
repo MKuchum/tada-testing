@@ -10,10 +10,10 @@ type Server struct {
 	t *tribonacci.Tribonacci
 }
 
-func NewServer() *Server {
+func NewServer(redisAddr string, redisPassword string, redisDB int) *Server {
 	s := &Server{
 		ServeMux: http.NewServeMux(),
-		t:        tribonacci.NewTribonacci(),
+		t:        tribonacci.NewTribonacciRedis(redisAddr, redisPassword, redisDB),
 	}
 	s.HandleFunc(getTribonacciPath, s.GetTribonacciHandler)
 	return s
