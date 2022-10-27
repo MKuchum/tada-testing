@@ -5,13 +5,15 @@ import (
 	"encoding/json"
 	"github.com/MKuchum/tada-testing/internal/storage"
 	"github.com/go-redis/redis/v9"
+	"go.uber.org/zap"
 )
 
 type Storage struct {
-	r *redis.Client
+	r      *redis.Client
+	logger *zap.Logger
 }
 
-func NewTribonacciStorageRedis(addr string, password string, db int) (storage.TribonacciStorage, error) {
+func NewTribonacciStorageRedis(addr string, password string, db int, logger *zap.Logger) (storage.TribonacciStorage, error) {
 	r := redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: password,
@@ -20,7 +22,8 @@ func NewTribonacciStorageRedis(addr string, password string, db int) (storage.Tr
 	if err := r.Ping(context.Background()).Err(); err != nil {
 		return nil, err
 	}
-	return &Storage{r: r}, nil
+	logger.Info("Successfully ping redis")
+	return &Storage{r: r, logger: logger}, nil
 }
 
 func (s *Storage) genKey(signature []float32) (string, error) {

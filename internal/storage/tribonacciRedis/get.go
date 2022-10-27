@@ -1,6 +1,9 @@
 package tribonacciRedis
 
-import "github.com/MKuchum/tada-testing/models"
+import (
+	"github.com/MKuchum/tada-testing/models"
+	"go.uber.org/zap"
+)
 
 func (s *Storage) Get(signature []float32, n int) ([]float32, error) {
 	if len(signature) != 3 {
@@ -14,6 +17,7 @@ func (s *Storage) Get(signature []float32, n int) ([]float32, error) {
 	if err != nil {
 		return nil, err
 	}
+	s.logger.Info("redis get", zap.Any("signature", signature), zap.Any("response", v))
 	if v != nil {
 		if len(v) >= n {
 			return v[:n], nil
