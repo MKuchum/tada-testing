@@ -6,9 +6,6 @@ import (
 )
 
 func (t *Tribonacci) Generate(input *models.TribonacciInput) (*models.TribonacciOutput, error) {
-	if err := input.Validate(); err != nil {
-		return nil, err
-	}
 	values, err := t.s.Get(input.Signature, input.N)
 	if err != nil {
 		return nil, err

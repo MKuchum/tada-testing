@@ -27,16 +27,20 @@ func (s *Server) GetTribonacciHandler(w http.ResponseWriter, req *http.Request) 
 	}
 	input := &models.TribonacciInput{}
 	if err := json.Unmarshal(reqBytes, input); err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, fmt.Sprintf("can not unmarshal request, %v", err.Error()), http.StatusBadRequest)
 		return
 	}
-	if input.Signature == nil { //default signature
+	if input.Signature == nil { //default signature7
 		input.Signature = []float32{1, 1, 1}
+	}
+	if err := input.Validate(); err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	output, err := s.t.Generate(input)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	respBytes, err := json.Marshal(output)
