@@ -9,9 +9,8 @@ func (s *Storage) Set(signature []float32, values []float32) error {
 	if len(signature) != 3 {
 		return models.WrongSignatureLenErr
 	}
-
 	if len(values) < len(signature) {
-		values = signature
+		return nil
 	}
 
 	v, err := s.get(signature)
