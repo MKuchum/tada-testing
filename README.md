@@ -50,7 +50,11 @@ go run cmd/main.go`
 │       └── tribonacci.go
 ├── models - модели и стандартные ошибки, которые используются в проекте 
 │   ├── error.go
-│   └── tribonacci_configs
+│   └── tribonacci_configs.go
+├── tests - небольшие тесты 
+│   ├── failed_test.go
+│   ├── successfully_test.go
+│   └── utils.go
 ├── go.mod
 │   └── go.sum
 └── README.md - *ВЫ ТУТ*
