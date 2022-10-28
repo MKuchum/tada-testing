@@ -7,18 +7,18 @@ import (
 
 func (t *Tribonacci) Generate(input *models.TribonacciInput) (*models.TribonacciOutput, error) {
 	t.logger.Info("start generate", zap.Any("input", input))
-	values, err := t.s.Get(input.Signature, input.N)
+	sequence, err := t.s.Get(input.Signature, input.N)
 	if err != nil {
 		return nil, err
 	}
-	for len(values) < input.N {
-		newValue := values[len(values)-1] + values[len(values)-2] + values[len(values)-3]
-		values = append(values, newValue)
+	for len(sequence) < input.N {
+		newValue := sequence[len(sequence)-1] + sequence[len(sequence)-2] + sequence[len(sequence)-3]
+		sequence = append(sequence, newValue)
 	}
-	if err := t.s.Set(input.Signature, values); err != nil {
+	if err := t.s.Set(input.Signature, sequence); err != nil {
 		return nil, err
 	}
-	output := &models.TribonacciOutput{Values: values}
+	output := &models.TribonacciOutput{Sequence: sequence}
 	t.logger.Info("end generate", zap.Any("input", input), zap.Any("output", output))
 	return output, nil
 }

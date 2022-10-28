@@ -16,5 +16,5 @@ func (input *TribonacciInput) Validate() error {
 }
 
 type TribonacciOutput struct {
-	Values []float32 `json:"values"`
+	Sequence []float32 `json:"sequence"`
 }
