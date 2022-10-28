@@ -10,6 +10,10 @@ func (s *Storage) Set(signature []float32, values []float32) error {
 		return models.WrongSignatureLenErr
 	}
 
+	if len(values) < len(signature) {
+		values = signature
+	}
+
 	v, err := s.get(signature)
 	if err != nil {
 		return err
